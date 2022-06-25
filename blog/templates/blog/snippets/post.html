@@ -1,0 +1,27 @@
+<div id="id-post-{{post.id}}" class="d-flex flex-column my-2 p-2">
+    <p>{{ post.content }}</p>
+    {% if post.image %}
+    <img class="display-img rounded my-2" src="{{ post.image.url }}">
+    {% endif %}
+
+    <div class="flex mt-4 mb-2 pb-2 border-bottom">
+        <button 
+            class="btn btn-outline-info"
+            hx-trigger="click" 
+            hx-get="{% url 'blog:post-update' post_id=post.id %}"
+            hx-target="#id-post-{{post.id}}" 
+            hx-swap="outerHTML"
+        >
+            Update
+        </button>
+        <button 
+            class="btn btn-outline-danger"
+            hx-trigger="click" 
+            hx-get="{% url 'blog:post-delete' post_id=post.id %}"
+            hx-target="#id-post-{{post.id}}" 
+            hx-swap="outerHTML"
+        >
+            Delete
+        </button>
+    </div>
+</div>

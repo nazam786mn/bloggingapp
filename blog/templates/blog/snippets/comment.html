@@ -1,0 +1,31 @@
+<div>
+    <div class="comment-div">
+        <img src="{{ comment.user.display_pic.url }}" alt="Profile Pic" class="thumbnail">
+        <div class="comment-body">
+            <p class="m-0 text-bold">{{ comment.user.username }}</p>
+            <p class="m-0">{{ comment.body }}</p>
+        </div>
+    </div>
+
+    {% if request.user.is_authenticated %}
+    <div id="id-comment-options">
+        <button href="#" class="btn reply-btn bg-none" id="id-reply-btn-{{ comment.id }}" onclick="showReplyForm('{{ comment.id }}')">reply</button>
+        <form
+            id="id-reply-form-{{comment.id}}" 
+            class="d-none"
+            class="inline-form"
+            hx-post="{% url 'blog:reply-comment' comment_id=comment.id %}"
+            hx-target="#id-replies-{{comment.id}}"
+            hx-swap="beforeend"
+            >
+            <input class="reply-input" name="reply-input" type="text" placeholder="write your reply...">
+        </form>
+    </div>
+{% endif %}
+
+    <div id="id-replies-{{comment.id}}">
+        {% for reply in comment.replies.all %}
+        {% include "blog/snippets/reply.html" %}
+        {% endfor %}
+    </div> 
+</div>

@@ -1,0 +1,56 @@
+.container {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    max-width: 700px;
+}
+
+.thumbnail {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.inline-form {
+    width: 100%;
+}
+
+.comment-div {
+    display: flex;
+    width: fit-content;
+}
+
+.comment-body {
+    display: flex;
+    flex-direction: column;
+    margin: 0.25rem;
+    padding: 0.5rem;
+    background-color: var(--bg-page);
+    border-radius: 0.5rem;
+}
+
+.reply-div {
+    display: flex;
+    width: fit-content;
+    margin-left: 2rem;
+}
+
+.reply-btn {
+    font-size: small;
+    width: fit-content;
+    padding: 0;
+    margin-bottom: 0.25rem;
+    margin-left: 3rem;
+}
+
+.bg-none,
+.bg-none:focus,
+.bg-none.focus {
+    background-color: var(--bg-primary);
+    box-shadow: none;
+}
+
+.reply-input {
+    max-width: 300px;
+    margin-left: 3rem;
+}

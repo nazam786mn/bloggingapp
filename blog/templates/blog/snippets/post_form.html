@@ -1,0 +1,42 @@
+<div id="id-post-{{post.id}}" class="d-flex flex-column my-2 border-bottom">
+    <form 
+        hx-encoding="multipart/form-data"
+        hx-post="{% url 'blog:post-update' post_id=post.id %}" 
+        hx-target="#id-post-{{post.id}}" 
+        hx-swap="outerHTML"
+    >
+
+        {% if form %}
+            {% for error in form.non_field.errors %}
+            <small class="text-danger">{{ error }}</small>
+            {% endfor %}
+            {% for field in form.hidden_fields %}
+            {{ field }}
+            {% for error in field.errors %}
+            <small class="text-danger">{{ error }}</small>
+            {% endfor %}
+            {% endfor %}
+            {% for field in form.visible_fields %}
+            <div class="form-element">
+                {% if field.field.widget.input_type != "checkbox" %}
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% else %}
+                {{ field }}
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {% endif %}
+                {% if field.help_text %}
+                <div class="ml-2 mb-0"><small>{{ field.help_text }}</small></div>
+                {% endif %}
+                {% for error in field.errors %}
+                <small class="text-danger">{{ error }}</small>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="mt-2 pb-2 border-top">
+            <button class="btn btn-outline-info mt-2">Update</button>
+        </div>
+    </form>
+</div>

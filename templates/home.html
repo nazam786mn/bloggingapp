@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% load temptags %}
+
+{% block content %}
+<div class="container">
+    {% if request.user.is_authenticated %}
+    <div class="content-section mb-2 p-2">
+        <div id="id-home-header" class="p-2">
+            <a href="{% url 'blog:blog-create' %}" class="btn btn-outline-info">Add New Blog</a>
+            {% if request.user.is_authenticated %}
+            <button
+                id="id_tag_btn"
+                class="btn btn-outline-info"
+                hx-trigger="click" 
+                hx-get="{% url 'accountProfile:get-tags' %}"
+                hx-target="#id-home-header" 
+                hx-swap="beforeend"
+                >
+                Tags
+            </button>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+    {% include 'snippets/blogs.html' %}
+    {% include 'snippets/pagination.html' %}
+</div>
+
+<script>
+    document.body.addEventListener("htmx:configRequest", (event) => {
+        event.detail.headers["X-CSRFToken"] = "{{ csrf_token }}"
+    })
+
+    document.body.addEventListener("htmx:afterRequest", (event) => {
+        let commentInputs = document.querySelectorAll("input.comment-input")
+        commentInputs.forEach((comment) => {
+            comment.value = ""
+        })
+
+        let replyInputs = document.querySelectorAll("input.reply-input")
+        replyInputs.forEach((reply) => {
+            reply.value = ""
+        })
+    })
+
+    const showReplyForm = (commentId) => {
+        event.preventDefault()
+        document.getElementById(`id-reply-btn-${commentId}`).classList.add("d-none")
+        document.getElementById(`id-reply-form-${commentId}`).classList.remove("d-none")
+    }
+
+    document.getElementById('id_tag_btn').addEventListener('click', async (e) => {
+        e.preventDefault()
+        await delay(1000)
+        document.getElementById('id_tag_btn').remove()
+    })
+
+    function delay(milliseconds) {
+        return new Promise(resolve => {
+            setTimeout(resolve, milliseconds);
+        });
+    }
+</script>
+
+{% endblock content %}

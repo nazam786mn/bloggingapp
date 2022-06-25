@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="content-section">
+{% if blog %}
+
+<div id="id-blog-header" class="d-flex justify-content-between border-bottom p-1">
+    <p class="heading m-0">Blog</p>
+    <div>
+        {% if blog.user == request.user %}
+        <a href="{% url 'blog:blog-edit' blog_id=blog.id %}" class="btn btn-outline-info">Edit</a>
+        <a href="{% url 'blog:blog-delete' blog_id=blog.id %}" class="btn btn-outline-danger">Delete</a>
+        {% endif %}
+    </div>
+</div>
+
+<div id="id-blog-container">
+    <div id="id-blog-{{blog.id}}" class="d-flex flex-column my-2 p-2">
+        <p class="m-0"><strong>{{ blog.heading }}</strong></p>
+        <p class="m-0">{{ blog.description }}</p>
+    </div>
+
+    <div id="id-post-container">
+        {% for post in blog.posts.all %}    
+        <div id="id-post-{{post.id}}" class="d-flex flex-column my-2 p-2">
+            {% if post.image %}
+            <img class="display-img rounded my-2" src="{{ post.image.url }}">
+            {% endif %}
+            {{ post.content }}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div 
+    id="id-blog-details"
+    hx-trigger="every 30s"
+    hx-get="{% url 'blog:get-blog-elements' blog_id=blog.id %}"
+    hx-target="#id-blog-details"
+    hx-swap="innerHTML"
+    >
+    {% include 'blog/snippets/blog_elements.html' %}
+</div>
+
+{% else %}
+<p class="p-4">Blog not found.</p>
+{% endif %}
+</div>
+
+<script>
+    document.body.addEventListener("htmx:configRequest", (event) => {
+        event.detail.headers["X-CSRFToken"] = "{{ csrf_token }}"
+    })
+
+    document.body.addEventListener("htmx:afterRequest", (event) => {
+        document.querySelector("input.comment-input").value = ""
+        let replyInputs = document.querySelectorAll("input.reply-input")
+        replyInputs.forEach((reply) => {
+            reply.value = ""
+        })
+    })
+
+    const showReplyForm = (commentId) => {
+        event.preventDefault()
+        document.getElementById(`id-reply-btn-${commentId}`).classList.add("d-none")
+        document.getElementById(`id-reply-form-${commentId}`).classList.remove("d-none")
+    }
+</script>
+{% endblock content %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="content-section">
+    <p class="border-bottom py-2">Are you sure you wanted to delete this blog. <strong>{{ blog.heading }}</strong></p>
+    <div class="d-flex">
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+        <a href="{% url 'blog:blog-detail' blog_id=blog.id %}" class="btn btn-info mx-2">Cancel</a>
+    </div>
+</div>
+{% endblock content %}

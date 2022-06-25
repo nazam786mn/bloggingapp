@@ -1,0 +1,32 @@
+{% if blogs %}
+{% for blog in blogs %}
+<div id="id-blog-{{blog.id}}" class="content-section mb-2 p-2">
+    <div class="d-flex">
+        <div class="container p-2 ml-2">
+            <div class="d-flex border-bottom mb-2">
+                <img src="{{ blog.user.display_pic.url }}" class="thumbnail">
+                <a class="mx-2 pt-2" href="{% url 'accountProfile:get-user-blogs' account_id=blog.user.id %}">{{ blog.user.username }}</a>
+            </div>
+            <div class="py-2">
+                <a class="d-flex" href="{% url 'blog:blog-detail' blog_id=blog.id %}">
+                    <p class="mb-0"><strong>{{ blog.heading }}</strong></p>
+                </a>
+                <a class="d-flex" href="{% url 'blog:blog-detail' blog_id=blog.id %}">
+                    <p class="mb-0">{{ blog.description }}</p>
+                </a>
+            </div>
+
+            <div 
+                id="id-blog-details-{{blog.id}}" 
+                hx-trigger="every 60s"
+                hx-get="{% url 'blog:get-blog-elements' blog_id=blog.id partial='True' %}"
+                hx-target="#id-blog-details-{{blog.id}}" 
+                hx-swap="innerHTML"
+            >
+                {% include 'snippets/blog_elements.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endif %}

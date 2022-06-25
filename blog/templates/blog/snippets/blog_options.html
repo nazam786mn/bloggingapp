@@ -1,0 +1,77 @@
+{% load temptags %}
+<div id="id-blog-options-{{blog.id}}" class="d-flex justify-content-between border-top p-2">
+    <div class="d-flex" id="like-container">
+        <span class="btn" id="like-count">{{ blog|getLikeCount }}</span>
+        {% if request.user in blog.likes.all %}
+        <button 
+            id="like-btn"
+            class="btn bg-none {% if not request.user.is_authenticated %} disabled {% endif %}"
+            hx-get="{% url 'blog:like-blog' blog_id=blog.id %}"
+            hx-trigger="click" 
+            hx-target="#id-blog-options-{{blog.id}}"
+            hx-swap="outerHTML">
+            Liked
+        </button>
+        {% else %}
+        <button 
+            id="like-btn" 
+            class="btn bg-none {% if not request.user.is_authenticated %} disabled {% endif %}" 
+            hx-get="{% url 'blog:like-blog' blog_id=blog.id %}" 
+            hx-trigger="click"
+            hx-target="#id-blog-options-{{blog.id}}" 
+            hx-swap="outerHTML">
+            Like
+        </button>
+        {% endif %}
+    </div>
+
+    <div class="d-flex" id="like-container">
+        <span class="btn" id="dislike-count">{{ blog|getDislikeCount }}</span>
+        {% if request.user in blog.dislikes.all %}
+        <button 
+            id="dislike-btn" 
+            class="btn bg-none {% if not request.user.is_authenticated %} disabled {% endif %}" 
+            hx-get="{% url 'blog:dislike-blog' blog_id=blog.id %}" 
+            hx-trigger="click"
+            hx-target="#id-blog-options-{{blog.id}}" 
+            hx-swap="outerHTML">
+            Disliked
+        </button>
+        {% else %}
+        <button 
+            id="dislike-btn" 
+            class="btn bg-none {% if not request.user.is_authenticated %} disabled {% endif %}" 
+            hx-get="{% url 'blog:dislike-blog' blog_id=blog.id %}" 
+            hx-trigger="click"
+            hx-target="#id-blog-options-{{blog.id}}" 
+            hx-swap="outerHTML">
+            Dislike
+        </button>
+        {% endif %}
+    </div>
+
+    <div>
+        {% if blog in request.user.profile.saved_blogs.all %}
+        <button 
+            id="dislike-btn" 
+            class="btn bg-none {% if not request.user.is_authenticated %} disabled {% endif %}" 
+            hx-get="{% url 'accountProfile:unsave-blog' blog_id=blog.id %}" 
+            hx-trigger="click"
+            hx-target="#id-blog-options-{{blog.id}}" 
+            hx-swap="outerHTML">
+            Saved
+        </button>
+        {% else %}
+        <button 
+            id="dislike-btn" 
+            class="btn bg-none {% if not request.user.is_authenticated %} disabled {% endif %}" 
+            hx-get="{% url 'accountProfile:save-blog' blog_id=blog.id %}" 
+            hx-trigger="click"
+            hx-target="#id-blog-options-{{blog.id}}" 
+            hx-swap="outerHTML">
+            Save
+        </button>
+        {% endif %}
+    </div>
+    
+</div>

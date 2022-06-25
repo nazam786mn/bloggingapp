@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% load temptags %}
+
+{% block content %}
+<div class="container">
+    {% include 'snippets/blogs.html' %}
+    {% include 'snippets/pagination.html' %}
+</div>
+
+<script>
+    document.body.addEventListener("htmx:configRequest", (event) => {
+        event.detail.headers["X-CSRFToken"] = "{{ csrf_token }}"
+    })
+
+    document.body.addEventListener("htmx:afterRequest", (event) => {
+        let commentInputs = document.querySelectorAll("input.comment-input")
+        commentInputs.forEach((comment) => {
+            comment.value = ""
+        })
+
+        let replyInputs = document.querySelectorAll("input.reply-input")
+        replyInputs.forEach((reply) => {
+            reply.value = ""
+        })
+    })
+
+    const showReplyForm = (commentId) => {
+        event.preventDefault()
+        document.getElementById(`id-reply-btn-${commentId}`).classList.add("d-none")
+        document.getElementById(`id-reply-form-${commentId}`).classList.remove("d-none")
+    }
+</script>
+
+{% endblock content %}

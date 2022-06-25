@@ -1,0 +1,35 @@
+    <div id="id-tag-container" class="d-flex flex-wrap p-2 border-bottom">
+        {% if tags %}
+        {% for tag in tags %}
+            {% if tag in blog.tags.all %}
+            <div class="btn-info px-2 my-1 mx-2 rounded">
+                {{tag}} 
+                <span 
+                    class="btn px-0"
+                    hx-trigger="click"
+                    hx-get="{% url 'blog:remove-tag-from-blog' blog_id=blog.id tag_id=tag.id %}"
+                    hx-target="#id-tag-container"
+                    hx-swap="outerHTML"
+                    >
+                    -
+                </span>
+            </div>
+            {% else %}
+            <div class="btn-info px-2 my-1 mx-2 rounded">
+                {{tag}} 
+                <span 
+                class="btn px-0"
+                hx-trigger="click"
+                hx-get="{% url 'blog:add-tag-to-blog' blog_id=blog.id tag_id=tag.id %}"
+                hx-target="#id-tag-container"
+                hx-swap="outerHTML"
+                >
+                +
+            </span>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% else %}
+            <p class="m-0">No tags available</p>
+        {% endif %}
+    </div>

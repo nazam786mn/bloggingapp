@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="content-section">
+    <form method="post">
+        {% csrf_token %}
+        <legend class="border-bottom mb-2">Add Blog</legend>
+        {% include 'snippets/form.html' %}
+        <div class="flex">
+            <button type="submit" class="btn btn-outline-info">Add</button>
+        </div>
+    </form>
+</div>
+{% endblock content %}

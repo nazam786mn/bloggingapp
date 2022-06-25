@@ -1,0 +1,13 @@
+<div id="id-blog-{{blog.id}}" class="d-flex flex-column my-2 p-2 border-bottom">
+    <form
+        hx-post="{% url 'blog:blog-update' blog_id=blog.id %}"
+        hx-target="#id-blog-{{blog.id}}"
+        hx-swap="outerHTML"
+    >
+        {% if form %}
+        {% include 'snippets/form.html' %}
+        {% endif %}
+
+        <button class="btn btn-outline-info mt-2">Update</button>
+    </form>
+</div>

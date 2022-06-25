@@ -1,0 +1,35 @@
+{% if blogs.has_other_pages %}
+
+<div class="content-section mt-2">
+    <div class="d-flex justify-content-center">
+        {% if blogs.has_previous %}
+        <a class="hide-sm" href="?page=1" class="btn bg-none">&laquo; First</a>
+        <a href="?page={{ blogs.previous_page_number }}" class="btn bg-none" role="button">Prev</a>
+        {% else %}
+        <a class="hide-sm" href="?page=1" class="btn bg-none">&laquo; First</a>
+        <a href="#" class="btn bg-none disabled" role="button">Prev</a>
+        {% endif %}
+
+        <span class="btn bg-none current mx-2">
+            Page {{ blogs.number }} of {{ blogs.paginator.num_pages }}
+        </span>
+
+        {% if blogs.has_next %}
+        <a href="?page={{ blogs.next_page_number }}" class="btn bg-none" role="button">Next</a>
+        <a class="hide-sm" href="?page={{ blogs.paginator.num_pages }}" class="btn bg-none">Last &raquo;</a>
+        {% else %}
+        <a href="#" class="btn bg-none disabled" role="button">Next</a>
+        <a class="hide-sm" href="?page={{ blogs.paginator.num_pages }}" class="btn bg-none">Last &raquo;</a>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    @media (max-width: 512px) {
+        .hide-sm {
+            display: none;
+        }
+    }
+</style>
+
+{% endif %}

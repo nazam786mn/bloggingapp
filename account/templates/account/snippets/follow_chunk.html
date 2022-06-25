@@ -1,0 +1,36 @@
+<div id="id-follow-chunk" class="d-flex flex-column">
+    {% if user in request.user.profile.following.all %}
+    <button 
+        class="btn btn-primary mt-2" 
+        hx-get="{% url 'accountProfile:unfollow' account_id=user.id %}"
+        hx-trigger="click"
+        hx-target="#id-follow-chunk" 
+        hx-swap="outerHTML"
+    >
+        Unfollow
+    </button>
+    {% else %}
+        {% if request.user in user.profile.following.all %}
+        <button 
+            class="btn btn-primary mt-2" 
+            hx-get="{% url 'accountProfile:follow' account_id=user.id %}" 
+            hx-trigger="click"
+            hx-target="#id-follow-chunk" 
+            hx-swap="outerHTML"
+        >
+            Follow Back
+        </button>
+        {% endif %}
+        {% if not request.user in user.profile.following.all%}
+        <button 
+            class="btn btn-primary mt-2" 
+            hx-get="{% url 'accountProfile:follow' account_id=user.id %}"
+            hx-trigger="click"
+            hx-target="#id-follow-chunk" 
+            hx-swap="outerHTML"
+        >
+            Follow
+        </button>
+        {% endif %}
+    {% endif %}
+</div>

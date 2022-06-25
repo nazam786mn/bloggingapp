@@ -1,0 +1,23 @@
+{% load temptags %}
+
+{% include 'blog/snippets/blog_options.html' %}
+
+{% if request.user.is_authenticated %}
+<div class="d-flex border-top p-2 border-bottom">
+    <form 
+    id="comment-form" 
+    class="inline-form" 
+    hx-post="{% url 'blog:comment-blog' blog_id=blog.id %}"
+        hx-target="#id-blog-comments-{{blog.id}}" 
+        hx-swap="afterbegin"
+        >
+        <input class="comment-input" name="comment-input" type="text" placeholder="write your comment...">
+    </form>
+</div>
+
+<div id="id-blog-comments-{{blog.id}}" class="d-flex flex-column flex-start p-2">
+    {% for comment in blog.comments.all|sliceComment %}
+    {% include 'blog/snippets/comment.html' %}
+    {% endfor %}
+</div>
+{% endif %}

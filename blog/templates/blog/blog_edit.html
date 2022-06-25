@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="content-section">
+    {% if blog %}
+
+    <div id="id-blog-header" class="d-flex flex-wrap justify-content-between border-bottom p-1">
+        <p class="heading m-0">Blog</p>
+        <div class="d-flex flex-wrap py-1 ml-2">
+            {% if blog.user == request.user %}
+            {% if not blog.is_published %}
+            <button 
+                class="btn btn-outline-info mx-1 mt-1" 
+                hx-trigger="click" 
+                hx-get="{% url 'blog:publish-blog' blog_id=blog.id %}"
+                hx-target="this"
+                hx-swap="outerHTML"
+            >
+                Publish
+            </button>
+            {% endif %}
+            <button
+                id="id_tag_btn"
+                class="btn btn-outline-info mx-1 mt-1" 
+                hx-trigger="click" 
+                hx-get="{% url 'blog:get-tags' blog_id=blog.id %}"
+                hx-target="#id-blog-container" 
+                hx-swap="afterbegin"
+            >
+                Add tags
+            </button>
+            <button  
+                class="btn btn-outline-info mx-1 mt-1"
+                hx-trigger="click" 
+                hx-get="{% url 'blog:post-add' blog_id=blog.id %}"
+                hx-target="#id-post-container" 
+                hx-swap="beforeend"
+            >
+                Add New Post
+            </button>
+            {% endif %}
+        </div>
+    </div>
+
+    <div id="id-blog-container">
+        {% include 'blog/snippets/blog.html' %}
+
+        <div id="id-post-container">
+        {% for post in blog.posts.all %}
+            {% include 'blog/snippets/post.html' %}
+        {% endfor %}
+        </div>
+    </div>
+
+    {% else %}
+    <p class="p-4">Blog not found.</p>
+    {% endif %}
+</div>
+
+<script>
+    document.body.addEventListener("htmx:configRequest", (event) => {
+        event.detail.headers["X-CSRFToken"] = "{{ csrf_token }}"
+    })
+
+    document.getElementById('id_tag_btn').addEventListener('click', async (e) => {
+        e.preventDefault()
+        await delay(1000)
+        document.getElementById('id_tag_btn').remove()
+    })
+
+    function delay(milliseconds) {
+        return new Promise(resolve => {
+            setTimeout(resolve, milliseconds);
+        });
+    }
+</script>
+{% endblock content %}
